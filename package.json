@@ -1,8 +1,8 @@
 {
   "name": "com.htl.scenesandstuff",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "displayName": "Scenes And Stuff",
-  "description": "Unity package to deal with transition animation between visible/hidden states.",
+  "description": "Package to handle additive scene loading in unity",
   "unity": "6000.3",
   "unityRelease": "4f1",
   "documentationUrl": "https://github.com/HTLGames/ScenesAndStuff",

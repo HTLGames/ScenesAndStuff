@@ -5,8 +5,14 @@ using UnityEngine.SceneManagement;
 
 namespace HTL.ScenesAndStuff
 {
+    /// <summary>
+    /// Holds a list of scene collections assets to load scene groups under different configurations.
+    /// </summary>
     public class SceneLoader : MonoBehaviour
     {
+        [SerializeField] private bool initializeOnAwake = true;
+
+        // TODO: There is nothing stopping you from adding one sceneCollection twice, maybe we should do somethiing about it...
         [field: SerializeField] public SceneCollection[] sceneCollections { get; private set; }
         private Dictionary<string, SceneGroup> currentGroup = new Dictionary<string, SceneGroup>();
         private List<SceneObject> permanentScenes;
@@ -14,13 +20,34 @@ namespace HTL.ScenesAndStuff
         private bool initialized = false;
         private class NotInitializedException : Exception {}
         private class MissingGroupException : Exception {}
+        private class EmptyGroupException : Exception
+        {
+            public EmptyGroupException(string msg) : base(msg) {}
+        }
 
+        void Awake()
+        {
+            if (initializeOnAwake) Initialize();
+        }
 
+        /// <summary>
+        /// Initializes the scene loader script.<br/>
+        /// The first collection to load will always be at index 0
+        /// </summary>
         public void Initialize()
         {
+            if (initialized)
+            {
+                Debug.LogError("<b>You are initialising the SceneLoader twice</b><br/>Maybe you "
+                            +   "should have a look at the <i>Initialize On Awake</i> field on "
+                            +   "your SceneLoader if you want to initialize manually.");
+                return;
+            }
+
             if (sceneCollections.Length == 0)
             {
                 Debug.LogError("No scene collections added to the list");
+                return;
             }
 
             SetSceneCollection(sceneCollections[0]);
@@ -37,14 +64,19 @@ namespace HTL.ScenesAndStuff
             currentGroup.Clear();
             foreach (SceneGroup s in collection.sceneGroups)
             {
+                // We don't want nulls here >:(
+                if (string.IsNullOrEmpty(s.activeScene)) 
+                    throw new EmptyGroupException($"The active scene in a group of {collection.name} has not been assigned.");
+
                 currentGroup.Add(s.activeScene, s);
             }
         }
 
         /// <summary>
-        /// Loads a given scene.
+        /// Loads a group associated with the scene. <br/>
+        /// The provided scene will be marked as active.
         /// </summary>
-        /// <param name="scene"></param>
+        /// <param name="scene">Active scene of the group.</param>
         public void LoadScene(SceneObject scene)
         {
             // Error handling
@@ -54,6 +86,11 @@ namespace HTL.ScenesAndStuff
             LoadSceneAsync(scene).GetAwaiter();
         }
 
+        /// <summary>
+        /// Loads a group associated with the scene. <br/>
+        /// The provided scene will be marked as active. <br/>
+        /// </summary>
+        /// <param name="scene">Active scene of the group.</param>
         public async Awaitable LoadSceneAsync(SceneObject scene)
         {
             // Error handling
