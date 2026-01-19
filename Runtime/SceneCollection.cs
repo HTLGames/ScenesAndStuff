@@ -7,7 +7,7 @@ namespace HTL.ScenesAndStuff
     public class SceneCollection : ScriptableObject
     {
         [field: SerializeField] public List<SceneObject> permanentScenes { get; private set; }
-        [field: SerializeField] public List<SceneGroup> sceneGroups { get; private set; }
+        [field: SerializeField] internal List<SceneGroup> sceneGroups { get; private set; }
 
         // TODO: Make sure there can't be duplicated scene groups in a single scene group
 

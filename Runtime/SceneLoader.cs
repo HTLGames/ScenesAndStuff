@@ -13,7 +13,7 @@ namespace HTL.ScenesAndStuff
         [SerializeField] private bool initializeOnAwake = true;
 
         // TODO: There is nothing stopping you from adding one sceneCollection twice, maybe we should do somethiing about it...
-        [field: SerializeField] public SceneCollection[] sceneCollections { get; private set; }
+        [field: SerializeField] internal SceneCollection[] sceneCollections { get; private set; }
         private Dictionary<string, SceneGroup> currentGroup = new Dictionary<string, SceneGroup>();
         private List<SceneObject> permanentScenes;
 
@@ -103,6 +103,15 @@ namespace HTL.ScenesAndStuff
 
             // Unload unnecesary scenes
             UnloadUnnecessaryScenes();
+
+            // Load permanent scenes (if not loaded yet)
+            foreach (SceneObject s in permanentScenes)
+            {
+                if (!IsSceneLoaded(s))
+                {
+                    await SceneManager.LoadSceneAsync(s);
+                }
+            }
 
             // Load all scenes in order
             foreach (SceneObject s in group.scenes)

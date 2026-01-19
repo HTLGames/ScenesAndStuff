@@ -6,7 +6,7 @@ using UnityEngine;
 namespace HTL.ScenesAndStuff
 {
     [System.Serializable]
-    public class SceneGroup
+    internal class SceneGroup
     {
         [field: SerializeField] public SceneObject activeScene { get; private set; }
         [field: SerializeField] public List<SceneObject> scenes { get; private set; }
