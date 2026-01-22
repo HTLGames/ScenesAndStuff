@@ -50,8 +50,8 @@ namespace HTL.ScenesAndStuff
                 return;
             }
 
-            SetSceneCollection(sceneCollections[0]);
             initialized = true;
+            SetSceneCollection(sceneCollections[0]);
         }
 
         public void SetSceneCollection(int index)
