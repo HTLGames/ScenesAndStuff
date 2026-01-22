@@ -138,10 +138,9 @@ namespace HTL.ScenesAndStuff
         {
             for (int i = 0; i < SceneManager.loadedSceneCount; ++i)
             {
-                string scene = SceneManager.GetSceneAt(i).name;
-                if (!IsScenePermanent(name))
+                if (!IsScenePermanent(SceneManager.GetSceneAt(i).name))
                 {
-                    SceneManager.UnloadSceneAsync(scene).GetAwaiter();
+                    SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(i)).GetAwaiter();
                 }
             }
         }
