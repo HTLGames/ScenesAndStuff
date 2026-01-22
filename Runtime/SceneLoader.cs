@@ -132,7 +132,7 @@ namespace HTL.ScenesAndStuff
             }
         }
 
-        private bool IsScenePermanent(SceneObject scene) => permanentScenes.Contains(scene);
+        private bool IsScenePermanent(SceneObject scene) => permanentScenes.Exists(s => s == (string)scene);
 
         private void UnloadUnnecessaryScenes()
         {
