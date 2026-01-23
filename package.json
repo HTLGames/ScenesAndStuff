@@ -1,6 +1,6 @@
 {
   "name": "com.htl.scenesandstuff",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "displayName": "Scenes And Stuff",
   "description": "Package to handle additive scene loading in unity",
   "unity": "6000.3",

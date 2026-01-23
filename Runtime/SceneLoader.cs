@@ -114,7 +114,7 @@ namespace HTL.ScenesAndStuff
             {
                 if (!IsSceneLoaded(s))
                 {
-                    await SceneManager.LoadSceneAsync(s);
+                    await SceneManager.LoadSceneAsync(s, LoadSceneMode.Additive);
                 }
             }
 
