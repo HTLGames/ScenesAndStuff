@@ -13,7 +13,8 @@ namespace HTL.ScenesAndStuff
         [SerializeField] private bool initializeOnAwake = true;
 
         // TODO: There is nothing stopping you from adding one sceneCollection twice, maybe we should do somethiing about it...
-        [field: SerializeField] internal SceneCollection[] sceneCollections { get; private set; }
+        [field: SerializeField] public SceneCollection initialSceneCollection { get; private set; }
+        public SceneCollection currentSceneCollection { get; private set; }
         private Dictionary<string, SceneGroup> currentGroup = new Dictionary<string, SceneGroup>();
         private List<SceneObject> permanentScenes;
 
@@ -44,22 +45,22 @@ namespace HTL.ScenesAndStuff
                 return;
             }
 
-            if (sceneCollections.Length == 0)
+            if (currentSceneCollection == null)
             {
-                Debug.LogError("No scene collections added to the list");
+                Debug.LogError("No scene collections added");
                 return;
             }
 
             initialized = true;
-            SetSceneCollection(sceneCollections[0]);
+            SetSceneCollection(initialSceneCollection);
         }
 
-        public void SetSceneCollection(int index)
-        {
-            SetSceneCollection(sceneCollections[index]);
-        }
-
-
+        /// <summary>
+        /// Changes the scene collection for another section of the game.
+        /// </summary>
+        /// <param name="collection">Cole</param>
+        /// <exception cref="NotInitializedException"></exception>
+        /// <exception cref="EmptyGroupException"></exception>
         private void SetSceneCollection(SceneCollection collection)
         {
             if (!initialized) throw new NotInitializedException();
@@ -75,6 +76,8 @@ namespace HTL.ScenesAndStuff
 
                 currentGroup.Add(s.activeScene, s);
             }
+
+            currentSceneCollection = collection;
         }
 
         /// <summary>
