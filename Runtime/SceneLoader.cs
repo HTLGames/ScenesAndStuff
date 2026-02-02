@@ -82,7 +82,7 @@ namespace HTL.ScenesAndStuff
         /// The provided scene will be marked as active.
         /// </summary>
         /// <param name="scene">Active scene of the group.</param>
-        public void LoadScene(SceneObject scene)
+        public void LoadScene(string scene)
         {
             // Error handling
             if (!initialized) throw new NotInitializedException();
@@ -91,12 +91,24 @@ namespace HTL.ScenesAndStuff
             LoadSceneAsync(scene).GetAwaiter();
         }
 
+        // /// <summary>
+        // /// Loads a group associated with the scene. <br/>
+        // /// The provided scene will be marked as active. <br/>
+        // /// </summary>
+        // /// <param name="scene">Active scene of the group.</param>
+        // public async Awaitable LoadSceneAsync(SceneObject scene)
+        // {
+        //     await LoadSceneAsync((string)scene);
+        // }
+
         /// <summary>
         /// Loads a group associated with the scene. <br/>
         /// The provided scene will be marked as active. <br/>
         /// </summary>
         /// <param name="scene">Active scene of the group.</param>
-        public async Awaitable LoadSceneAsync(SceneObject scene)
+        /// <exception cref="NotInitializedException">The scene was not initialized</exception>
+        /// <exception cref="MissingGroupException">The scene you are trying to load isn't added to the group</exception>
+        public async Awaitable LoadSceneAsync(string scene)
         {
             // Error handling
             if (!initialized) throw new NotInitializedException();
@@ -107,7 +119,7 @@ namespace HTL.ScenesAndStuff
             currentGroup.TryGetValue(scene, out group);
 
             // Unload unnecesary scenes
-            UnloadUnnecessaryScenes();
+            await UnloadUnnecessaryScenes();
 
             // Load permanent scenes (if not loaded yet)
             foreach (SceneObject s in permanentScenes)
@@ -132,16 +144,22 @@ namespace HTL.ScenesAndStuff
             }
         }
 
-        private bool IsScenePermanent(SceneObject scene) => permanentScenes.Exists(s => s == (string)scene);
+        private bool IsScenePermanent(string scene) => permanentScenes.Exists(s => s == scene);
 
-        private void UnloadUnnecessaryScenes()
+        private async Awaitable UnloadUnnecessaryScenes()
         {
+            List<string> scenesToUnload = new List<string>(SceneManager.loadedSceneCount);
             for (int i = 0; i < SceneManager.loadedSceneCount; ++i)
             {
                 if (!IsScenePermanent(SceneManager.GetSceneAt(i).name))
                 {
-                    SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(i)).GetAwaiter();
+                    scenesToUnload.Add(SceneManager.GetSceneAt(i).name);
                 }
+            }
+
+            foreach(string s in scenesToUnload)
+            {
+                await SceneManager.UnloadSceneAsync(s);
             }
         }
 
