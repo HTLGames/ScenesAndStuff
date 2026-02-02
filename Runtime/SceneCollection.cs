@@ -9,6 +9,22 @@ namespace HTL.ScenesAndStuff
         [field: SerializeField] public List<SceneObject> permanentScenes { get; private set; }
         [field: SerializeField] internal List<SceneGroup> sceneGroups { get; private set; }
 
+        /// <summary>
+        /// Gets a scene group's active scene name depending on the order in which the groups are added to the collection.
+        /// </summary>
+        /// <param name="index">Index of the scene group.</param>
+        /// <returns>Scene group's active scene name</returns>
+        /// <exception cref="System.IndexOutOfRangeException">If the index exceeds the amount of scene groups or is less than 0.</exception>
+        public string GetSceneByIndex(int index)
+        {
+            if (index < 0 || index > sceneGroups.Count)
+            {
+                throw new System.IndexOutOfRangeException();
+            }
+
+            return sceneGroups[index].activeScene;
+        }
+
         // TODO: Make sure there can't be duplicated scene groups in a single scene group
 
 #if UNITY_EDITOR
