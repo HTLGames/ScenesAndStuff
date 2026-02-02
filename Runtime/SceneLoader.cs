@@ -82,7 +82,7 @@ namespace HTL.ScenesAndStuff
         /// </summary>
         /// <param name="collection">Next collection</param>
         /// <param name="initialScene">First scene to load from the collection</param>
-        public void SetSceneCollection(SceneCollection collection, string initialScene = null)
+        public void SetSceneCollection(SceneCollection collection, string initialScene)
         {
             SetSceneCollectionAsync(collection, initialScene).GetAwaiter();
         }
@@ -92,7 +92,7 @@ namespace HTL.ScenesAndStuff
         /// </summary>
         /// <param name="collection">Next collection</param>
         /// <param name="initialScene">First scene to load from the collection</param>
-        public async Awaitable SetSceneCollectionAsync(SceneCollection collection, string initialScene = null)
+        public async Awaitable SetSceneCollectionAsync(SceneCollection collection, string initialScene)
         {
             SetSceneCollection(collection);
 
