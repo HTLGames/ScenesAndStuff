@@ -60,7 +60,7 @@ namespace HTL.ScenesAndStuff
         }
 
 
-        public void SetSceneCollection(SceneCollection collection)
+        private void SetSceneCollection(SceneCollection collection)
         {
             if (!initialized) throw new NotInitializedException();
 
@@ -74,6 +74,31 @@ namespace HTL.ScenesAndStuff
                     throw new EmptyGroupException($"The active scene in a group of {collection.name} has not been assigned.");
 
                 currentGroup.Add(s.activeScene, s);
+            }
+        }
+
+        /// <summary>
+        /// Changes the scene loader's collection and loads a scene from it.
+        /// </summary>
+        /// <param name="collection">Next collection</param>
+        /// <param name="initialScene">First scene to load from the collection</param>
+        public void SetSceneCollection(SceneCollection collection, string initialScene = null)
+        {
+            SetSceneCollectionAsync(collection, initialScene).GetAwaiter();
+        }
+
+        /// <summary>
+        /// Changes the scene loader's collection and loads a scene from it, but asyncronously.
+        /// </summary>
+        /// <param name="collection">Next collection</param>
+        /// <param name="initialScene">First scene to load from the collection</param>
+        public async Awaitable SetSceneCollectionAsync(SceneCollection collection, string initialScene = null)
+        {
+            SetSceneCollection(collection);
+
+            if (string.IsNullOrEmpty(initialScene))
+            {
+                await LoadSceneAsync(initialScene);
             }
         }
 
