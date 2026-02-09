@@ -99,7 +99,7 @@ namespace HTL.ScenesAndStuff
         {
             SetSceneCollection(collection);
 
-            if (string.IsNullOrEmpty(initialScene))
+            if (!string.IsNullOrEmpty(initialScene))
             {
                 await LoadSceneAsync(initialScene);
             }
