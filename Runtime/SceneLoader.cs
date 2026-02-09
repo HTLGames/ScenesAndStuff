@@ -45,7 +45,7 @@ namespace HTL.ScenesAndStuff
                 return;
             }
 
-            if (currentSceneCollection == null)
+            if (initialSceneCollection == null)
             {
                 Debug.LogError("No scene collections added");
                 return;
