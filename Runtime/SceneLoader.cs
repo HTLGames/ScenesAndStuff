@@ -101,7 +101,14 @@ namespace HTL.ScenesAndStuff
 
             if (!string.IsNullOrEmpty(initialScene))
             {
-                await LoadSceneAsync(initialScene);
+                try
+                {
+                    await LoadSceneAsync(initialScene);
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
             }
         }
 
